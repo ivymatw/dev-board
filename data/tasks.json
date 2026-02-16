@@ -11,7 +11,7 @@
       "範例"
     ],
     "createdAt": "2026-02-16T12:21:08.291Z",
-    "updatedAt": "2026-02-16T17:07:20.354Z"
+    "updatedAt": "2026-02-16T17:07:28.355Z"
   },
   {
     "id": "4e2103d6-7641-485f-a63f-d2eb03906862",
@@ -22,7 +22,7 @@
     "status": "in-progress",
     "tags": [],
     "createdAt": "2026-02-16T12:51:12.355Z",
-    "updatedAt": "2026-02-16T17:07:20.364Z",
+    "updatedAt": "2026-02-16T17:07:28.365Z",
     "repoUrl": "https://github.com/ivymatw/dev-board-spec-mdepub.git",
     "designRepoUrl": "https://github.com/ivymatw/dev-board-design-mdepub.git",
     "designStatus": "completed"
