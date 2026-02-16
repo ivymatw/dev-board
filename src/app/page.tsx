@@ -36,16 +36,47 @@ export default function Home() {
     setIsModalOpen(true)
   }
 
-  const handleSubmitTask = (data: TaskFormData) => {
+  const handleSubmitTask = async (data: TaskFormData) => {
     if (editingTask) {
+      const hadNoRequirement = !editingTask.userRequirement || editingTask.userRequirement.trim() === ''
+      const hasNewRequirement = data.userRequirement && data.userRequirement.trim().length > 0
+      
       updateTask(editingTask.id, {
         title: data.title,
         description: data.description,
+        userRequirement: data.userRequirement,
         priority: data.priority,
         tags: data.tags,
       })
+      
+      // Generate spec if userRequirement was added or changed
+      if (hasNewRequirement) {
+        const updatedTask = { ...editingTask, ...data }
+        try {
+          await fetch('/api/specs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId: updatedTask.id }),
+          })
+        } catch (error) {
+          console.error('Failed to generate spec:', error)
+        }
+      }
     } else {
-      addTask(data.title, data.description, data.priority, data.tags)
+      const newTask = addTask(data.title, data.description, data.userRequirement, data.priority, data.tags)
+      
+      // Generate spec if userRequirement exists
+      if (data.userRequirement && data.userRequirement.trim().length > 0) {
+        try {
+          await fetch('/api/specs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId: newTask.id }),
+          })
+        } catch (error) {
+          console.error('Failed to generate spec:', error)
+        }
+      }
     }
   }
 

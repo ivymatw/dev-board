@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Task, TaskFilter, Priority, Status } from '@/lib/types'
-import { getTasks, saveTasks } from '@/lib/storage'
 
 const DEFAULT_TASKS: Task[] = [
   {
     id: uuidv4(),
     title: '歡迎使用 DevBoard',
     description: '這是您的第一個任務！您可以編輯或刪除它。',
+    userRequirement: '',
     priority: 'medium',
     status: 'todo',
     tags: ['歡迎'],
@@ -20,6 +20,7 @@ const DEFAULT_TASKS: Task[] = [
     id: uuidv4(),
     title: '建立新任務',
     description: '點擊上方的新增按鈕來建立新的任務卡片。',
+    userRequirement: '',
     priority: 'high',
     status: 'in-progress',
     tags: ['教學'],
@@ -30,6 +31,7 @@ const DEFAULT_TASKS: Task[] = [
     id: uuidv4(),
     title: '完成範例任務',
     description: '將這個任務拖曳到已完成欄位，或點擊編輯按鈕修改狀態。',
+    userRequirement: '',
     priority: 'low',
     status: 'done',
     tags: ['教學', '範例'],
@@ -37,6 +39,44 @@ const DEFAULT_TASKS: Task[] = [
     updatedAt: new Date().toISOString(),
   },
 ]
+
+const API_BASE = '/api/tasks'
+
+async function fetchTasks(): Promise<Task[]> {
+  const res = await fetch(API_BASE)
+  if (!res.ok) throw new Error('Failed to fetch tasks')
+  return res.json()
+}
+
+async function saveTasksToServer(tasks: Task[]): Promise<void> {
+  // Delete all and recreate
+  for (const task of tasks) {
+    if (tasks.indexOf(task) === 0) {
+      // First task - create or replace
+      const existing = await fetch(API_BASE)
+      if (existing.ok) {
+        const existingTasks: Task[] = await existing.json()
+        // Delete all existing
+        for (const t of existingTasks) {
+          await fetch(`${API_BASE}/${t.id}`, { method: 'DELETE' })
+        }
+      }
+    }
+    // Create new task
+    await fetch(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: task.title,
+        description: task.description,
+        userRequirement: task.userRequirement,
+        priority: task.priority,
+        tags: task.tags,
+        status: task.status,
+      }),
+    })
+  }
+}
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -46,30 +86,93 @@ export function useTasks() {
     tags: [],
   })
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
-  // Load tasks from localStorage on mount
+  // Load tasks from server on mount
   useEffect(() => {
-    const storedTasks = getTasks()
-    if (storedTasks.length > 0) {
-      setTasks(storedTasks)
-    } else {
-      // Set default tasks for first-time users
-      setTasks(DEFAULT_TASKS)
-      saveTasks(DEFAULT_TASKS)
-    }
-    setIsLoaded(true)
+    fetchTasks()
+      .then((serverTasks) => {
+        if (serverTasks.length > 0) {
+          setTasks(serverTasks)
+        } else {
+          // Set default tasks for first-time users
+          setTasks(DEFAULT_TASKS)
+          DEFAULT_TASKS.forEach(task => {
+            fetch(API_BASE, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: task.title,
+                description: task.description,
+                userRequirement: task.userRequirement,
+                priority: task.priority,
+                tags: task.tags,
+              }),
+            })
+          })
+        }
+        setIsLoaded(true)
+      })
+      .catch(() => {
+        setTasks(DEFAULT_TASKS)
+        setIsLoaded(true)
+      })
   }, [])
 
-  // Save tasks to localStorage whenever they change
+  // Save tasks to server whenever they change
   useEffect(() => {
-    if (isLoaded) {
-      saveTasks(tasks)
+    if (isLoaded && !isSaving) {
+      const timeout = setTimeout(() => {
+        setIsSaving(true)
+        fetch(API_BASE)
+          .then(res => res.json())
+          .then(async (serverTasks: Task[]) => {
+            // Compare and sync
+            const serverIds = new Set(serverTasks.map(t => t.id))
+            const localIds = new Set(tasks.map(t => t.id))
+            
+            // Delete tasks not in local
+            for (const st of serverTasks) {
+              if (!localIds.has(st.id)) {
+                await fetch(`${API_BASE}/${st.id}`, { method: 'DELETE' })
+              }
+            }
+            
+            // Update or create tasks
+            for (const task of tasks) {
+              if (serverIds.has(task.id)) {
+                await fetch(`${API_BASE}/${task.id}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(task),
+                })
+              } else {
+                await fetch(API_BASE, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    title: task.title,
+                    description: task.description,
+                    userRequirement: task.userRequirement,
+                    priority: task.priority,
+                    tags: task.tags,
+                    status: task.status,
+                  }),
+                })
+              }
+            }
+            setIsSaving(false)
+          })
+          .catch(() => setIsSaving(false))
+      }, 1000)
+      return () => clearTimeout(timeout)
     }
-  }, [tasks, isLoaded])
+  }, [tasks, isLoaded, isSaving])
 
   const addTask = useCallback((
     title: string,
     description: string,
+    userRequirement: string,
     priority: Priority,
     tags: string[]
   ) => {
@@ -77,6 +180,7 @@ export function useTasks() {
       id: uuidv4(),
       title,
       description,
+      userRequirement,
       priority,
       status: 'todo',
       tags,
