@@ -5,6 +5,7 @@ export interface Task {
   id: string
   title: string
   description: string
+  userRequirement: string
   priority: Priority
   status: Status
   tags: string[]
@@ -21,6 +22,7 @@ export interface TaskFilter {
 export interface TaskFormData {
   title: string
   description: string
+  userRequirement: string
   priority: Priority
   tags: string[]
 }
