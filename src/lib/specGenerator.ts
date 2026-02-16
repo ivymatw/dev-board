@@ -146,10 +146,10 @@ export async function pushSpecToGitHub(task: Task): Promise<void> {
     if (fs.existsSync(tempDir)) {
       fs.rmSync(tempDir, { recursive: true })
     }
- task: generate spec if user  }
+  }
 }
 
-// ProcessRequirement exists
+// Process task spec if userRequirement exists
 export async function processTaskSpec(task: Task): Promise<void> {
   if (task.userRequirement && task.userRequirement.trim().length > 0) {
     await pushSpecToGitHub(task)
