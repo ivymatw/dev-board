@@ -11,6 +11,7 @@ export interface Task {
   tags: string[]
   createdAt: string
   updatedAt: string
+  repoUrl?: string
 }
 
 export interface TaskFilter {
