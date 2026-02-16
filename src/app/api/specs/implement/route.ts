@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getTasks, saveTasks } from '@/lib/storage'
-import { fetchDesignFromGitHub, commitImplementationStep } from '@/lib/githubService'
+import { fetchDesignFromGitHub, commitImplementationStep, commitImplementation } from '@/lib/githubService'
 
 // Parse implementation steps from DESIGN.md
 function parseImplementationSteps(designContent: string): string[] {
@@ -65,10 +65,10 @@ export async function POST(request: Request) {
 
     const task = tasks[taskIndex]
 
-    // Check if design repo exists
-    if (!task.designRepoUrl) {
+    // Check if repo exists (spec must be generated first)
+    if (!task.repoUrl) {
       return NextResponse.json(
-        { error: 'No design repository found. Please create system design first.' },
+        { error: 'No repository found. Please generate the specification first.' },
         { status: 400 }
       )
     }
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     // If no stepNumber provided, this is the initial call - start implementation
     if (stepNumber === undefined) {
       // Fetch design content to get steps
-      const designContent = await fetchDesignFromGitHub(task.designRepoUrl)
+      const designContent = await fetchDesignFromGitHub(task.repoUrl)
       const steps = parseImplementationSteps(designContent)
       
       // Update task status to in-progress
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     
     try {
       await commitImplementationStep(
-        task.designRepoUrl,
+        task.repoUrl,
         stepNumber,
         step,
         files
@@ -166,9 +166,9 @@ export async function GET(request: Request) {
   let steps: string[] = []
   let designContent = ''
   
-  if (task.designRepoUrl) {
+  if (task.repoUrl) {
     try {
-      designContent = await fetchDesignFromGitHub(task.designRepoUrl)
+      designContent = await fetchDesignFromGitHub(task.repoUrl)
       steps = parseImplementationSteps(designContent)
     } catch (error) {
       console.error('Error fetching design:', error)
@@ -176,10 +176,9 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json({
-    designRepoUrl: task.designRepoUrl,
+    repoUrl: task.repoUrl,
     designStatus: task.designStatus || 'pending',
     implementationStatus: task.implementationStatus || 'pending',
-    steps,
-    specRepoUrl: task.specRepoUrl || task.repoUrl
+    steps
   })
 }

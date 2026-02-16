@@ -56,6 +56,24 @@
       "namedRegex": "^/api/specs(?:/)?$"
     },
     {
+      "page": "/api/specs/design",
+      "regex": "^/api/specs/design(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/specs/design(?:/)?$"
+    },
+    {
+      "page": "/api/specs/generate",
+      "regex": "^/api/specs/generate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/specs/generate(?:/)?$"
+    },
+    {
+      "page": "/api/specs/implement",
+      "regex": "^/api/specs/implement(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/specs/implement(?:/)?$"
+    },
+    {
       "page": "/api/tasks",
       "regex": "^/api/tasks(?:/)?$",
       "routeKeys": {},

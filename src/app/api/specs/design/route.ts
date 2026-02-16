@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getTasks, saveTasks } from '@/lib/storage'
-import { createDesignGitHubRepo } from '@/lib/githubService'
+import { createOrUpdateDesign } from '@/lib/githubService'
 
 export async function POST(request: Request) {
   try {
@@ -26,28 +26,20 @@ export async function POST(request: Request) {
 
     const task = tasks[taskIndex]
 
-    // Check if task has specRepoUrl (requires spec to be generated first)
-    if (!task.specRepoUrl && !task.repoUrl) {
+    // Check if task has repoUrl (requires spec to be generated first)
+    if (!task.repoUrl) {
       return NextResponse.json(
         { error: 'Please generate the specification first before creating system design.' },
         { status: 400 }
       )
     }
 
-    // Check if design repo already exists
-    if (task.designRepoUrl) {
-      return NextResponse.json(
-        { error: 'Design repository already exists', designRepoUrl: task.designRepoUrl },
-        { status: 400 }
-      )
-    }
-
-    let designRepoUrl: string
+    let repoUrl: string
 
     try {
-      console.log(`Creating design GitHub repo for task: ${task.title}`)
-      designRepoUrl = await createDesignGitHubRepo(task)
-      console.log(`Created design repo: ${designRepoUrl}`)
+      console.log(`Creating/updating DESIGN for task: ${task.title}`)
+      repoUrl = await createOrUpdateDesign(task)
+      console.log(`Design added to repo: ${repoUrl}`)
     } catch (githubError) {
       console.error('GitHub design operation failed:', githubError)
       return NextResponse.json(
@@ -56,10 +48,10 @@ export async function POST(request: Request) {
       )
     }
 
-    // Update task with designRepoUrl and designStatus
+    // Update task with designStatus (repoUrl stays the same - single repo)
     tasks[taskIndex] = {
       ...task,
-      designRepoUrl,
+      repoUrl,
       designStatus: 'completed',
       updatedAt: new Date().toISOString()
     }
@@ -67,7 +59,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ 
       success: true, 
-      designRepoUrl
+      repoUrl
     })
   } catch (error) {
     console.error('Error generating design:', error)

@@ -1,6 +1,6 @@
 [
   {
-    "id": "aac1ddf6-0549-4725-ade7-1fad581a86cf",
+    "id": "feb6a871-2e47-42da-a75a-310692dce986",
     "title": "完成範例任務",
     "description": "將這個任務拖曳到已完成欄位，或點擊編輯按鈕修改狀態。",
     "userRequirement": "",
@@ -10,20 +10,21 @@
       "教學",
       "範例"
     ],
-    "createdAt": "2026-02-16T07:00:33.430Z",
-    "updatedAt": "2026-02-16T07:00:33.430Z"
+    "createdAt": "2026-02-16T12:21:08.291Z",
+    "updatedAt": "2026-02-16T17:07:20.354Z"
   },
   {
-    "id": "c8c48c24-05bb-4893-984b-cd72ffbeddc9",
-    "title": "建立新任務",
-    "description": "點擊上方的新增按鈕來建立新的任務卡片。",
-    "userRequirement": "",
-    "priority": "high",
-    "status": "todo",
-    "tags": [
-      "教學"
-    ],
-    "createdAt": "2026-02-16T07:00:33.435Z",
-    "updatedAt": "2026-02-16T07:00:33.435Z"
+    "id": "4e2103d6-7641-485f-a63f-d2eb03906862",
+    "title": "md轉epub",
+    "description": "將使用者的markdown檔案轉成epub格式",
+    "userRequirement": "輸入使用者在本地的markdown格式檔案，產生epub格式檔案供電子書使用",
+    "priority": "medium",
+    "status": "in-progress",
+    "tags": [],
+    "createdAt": "2026-02-16T12:51:12.355Z",
+    "updatedAt": "2026-02-16T17:07:20.364Z",
+    "repoUrl": "https://github.com/ivymatw/dev-board-spec-mdepub.git",
+    "designRepoUrl": "https://github.com/ivymatw/dev-board-design-mdepub.git",
+    "designStatus": "completed"
   }
 ]

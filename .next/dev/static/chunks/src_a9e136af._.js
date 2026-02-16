@@ -439,17 +439,133 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pen.js [app-client] (ecmascript) <export default as Edit2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-client] (ecmascript) <export default as Trash2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/file-text.js [app-client] (ecmascript) <export default as FileText>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-client] (ecmascript) <export default as Loader2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-play.js [app-client] (ecmascript) <export default as PlayCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-check-big.js [app-client] (ecmascript) <export default as CheckCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/types.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
 ;
-function TaskCard({ task, onEdit, onDelete }) {
+function TaskCard({ task, onEdit, onDelete, onSpecGenerated }) {
+    _s();
+    const [isGeneratingSpec, setIsGeneratingSpec] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isGeneratingDesign, setIsGeneratingDesign] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isImplementing, setIsImplementing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const priorityColor = {
         low: 'bg-green-500',
         medium: 'bg-amber-500',
         high: 'bg-red-500'
     }[task.priority];
+    const hasUserRequirement = task.userRequirement && task.userRequirement.trim().length > 0;
+    const hasRepo = !!task.repoUrl;
+    const isDesignCompleted = task.designStatus === 'completed';
+    const isImplementingStatus = task.implementationStatus === 'in-progress';
+    const isImplemented = task.implementationStatus === 'completed';
+    const handleGenerateSpec = async ()=>{
+        if (!hasUserRequirement) return;
+        setIsGeneratingSpec(true);
+        setError(null);
+        try {
+            const response = await fetch('/api/specs/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    taskId: task.id
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to generate spec');
+            }
+            // Notify parent to refresh tasks
+            if (onSpecGenerated) {
+                onSpecGenerated({
+                    ...task,
+                    repoUrl: data.repoUrl
+                });
+            }
+        } catch (err) {
+            console.error('Error generating spec:', err);
+            setError(err instanceof Error ? err.message : 'Failed to generate spec');
+        } finally{
+            setIsGeneratingSpec(false);
+        }
+    };
+    const handleGenerateDesign = async ()=>{
+        if (!hasRepo) return;
+        setIsGeneratingDesign(true);
+        setError(null);
+        try {
+            const response = await fetch('/api/specs/design', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    taskId: task.id
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to generate design');
+            }
+            // Refresh the task
+            if (onSpecGenerated) {
+                onSpecGenerated({
+                    ...task,
+                    repoUrl: data.repoUrl,
+                    designStatus: 'completed'
+                });
+            }
+        } catch (err) {
+            console.error('Error generating design:', err);
+            setError(err instanceof Error ? err.message : 'Failed to generate design');
+        } finally{
+            setIsGeneratingDesign(false);
+        }
+    };
+    const handleImplement = async ()=>{
+        if (!hasRepo) return;
+        setIsImplementing(true);
+        setError(null);
+        try {
+            const response = await fetch('/api/specs/implement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    taskId: task.id
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to start implementation');
+            }
+            // Refresh the task
+            if (onSpecGenerated) {
+                onSpecGenerated({
+                    ...task,
+                    implementationStatus: 'in-progress'
+                });
+            }
+            alert(`Implementation started! ${data.totalSteps} steps to complete.`);
+        } catch (err) {
+            console.error('Error implementing:', err);
+            setError(err instanceof Error ? err.message : 'Failed to start implementation');
+        } finally{
+            setIsImplementing(false);
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `task-card bg-surface border border-border border-l-4 ${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STATUS_COLORS"][task.status]} rounded-lg p-4 shadow-sm`,
         children: [
@@ -461,7 +577,7 @@ function TaskCard({ task, onEdit, onDelete }) {
                         children: task.title
                     }, void 0, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 24,
+                        lineNumber: 145,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -471,18 +587,18 @@ function TaskCard({ task, onEdit, onDelete }) {
                             title: `${task.priority} priority`
                         }, void 0, false, {
                             fileName: "[project]/src/components/TaskCard.tsx",
-                            lineNumber: 26,
+                            lineNumber: 147,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 25,
+                        lineNumber: 146,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/TaskCard.tsx",
-                lineNumber: 23,
+                lineNumber: 144,
                 columnNumber: 7
             }, this),
             task.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -490,7 +606,7 @@ function TaskCard({ task, onEdit, onDelete }) {
                 children: task.description
             }, void 0, false, {
                 fileName: "[project]/src/components/TaskCard.tsx",
-                lineNumber: 31,
+                lineNumber: 152,
                 columnNumber: 9
             }, this),
             task.userRequirement && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -501,7 +617,7 @@ function TaskCard({ task, onEdit, onDelete }) {
                         children: "使用者需求："
                     }, void 0, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 38,
+                        lineNumber: 159,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -509,14 +625,91 @@ function TaskCard({ task, onEdit, onDelete }) {
                         children: task.userRequirement
                     }, void 0, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 39,
+                        lineNumber: 160,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/TaskCard.tsx",
-                lineNumber: 37,
+                lineNumber: 158,
                 columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-wrap gap-2 mb-3",
+                children: [
+                    hasRepo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 rounded",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                className: "w-3 h-3"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 168,
+                                columnNumber: 13
+                            }, this),
+                            "規格已產生"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/TaskCard.tsx",
+                        lineNumber: 167,
+                        columnNumber: 11
+                    }, this),
+                    isDesignCompleted && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 rounded",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
+                                className: "w-3 h-3"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 174,
+                                columnNumber: 13
+                            }, this),
+                            "設計已完成"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/TaskCard.tsx",
+                        lineNumber: 173,
+                        columnNumber: 11
+                    }, this),
+                    isImplementingStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-100 text-amber-amber-900-700 dark:bg dark:text-amber-300 rounded",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                className: "w-3 h-3 animate-spin"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 180,
+                                columnNumber: 13
+                            }, this),
+                            "實作中"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/TaskCard.tsx",
+                        lineNumber: 179,
+                        columnNumber: 11
+                    }, this),
+                    isImplemented && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__["CheckCircle"], {
+                                className: "w-3 h-3"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 186,
+                                columnNumber: 13
+                            }, this),
+                            "實作完成"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/TaskCard.tsx",
+                        lineNumber: 185,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/TaskCard.tsx",
+                lineNumber: 165,
+                columnNumber: 7
             }, this),
             task.tags.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex flex-wrap gap-1 mb-3",
@@ -525,12 +718,12 @@ function TaskCard({ task, onEdit, onDelete }) {
                         children: tag
                     }, tag, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 46,
+                        lineNumber: 195,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/TaskCard.tsx",
-                lineNumber: 44,
+                lineNumber: 193,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -541,12 +734,90 @@ function TaskCard({ task, onEdit, onDelete }) {
                         children: new Date(task.createdAt).toLocaleDateString('zh-TW')
                     }, void 0, false, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 57,
+                        lineNumber: 206,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center gap-1",
                         children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleGenerateSpec,
+                                disabled: !hasUserRequirement || isGeneratingSpec,
+                                className: `p-1.5 rounded transition-colors ${!hasUserRequirement ? 'text-muted-foreground/50 cursor-not-allowed' : isGeneratingSpec ? 'text-muted-foreground cursor-wait' : hasRepo ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950'}`,
+                                "aria-label": hasRepo ? '更新規格' : '產生規格',
+                                title: !hasUserRequirement ? '請先新增使用者需求' : hasRepo ? '更新規格' : '產生規格',
+                                children: isGeneratingSpec ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                    className: "w-4 h-4 animate-spin"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 233,
+                                    columnNumber: 15
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                    className: "w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 235,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 211,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleGenerateDesign,
+                                disabled: !hasRepo || isGeneratingDesign || isDesignCompleted,
+                                className: `p-1.5 rounded transition-colors ${!hasRepo ? 'text-muted-foreground/50 cursor-not-allowed' : isGeneratingDesign ? 'text-muted-foreground cursor-wait' : isDesignCompleted ? 'text-purple-400 cursor-not-allowed' : 'text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:hover:bg-purple-950'}`,
+                                "aria-label": isDesignCompleted ? '系統設計已完成' : '系統設計',
+                                title: !hasRepo ? '請先產生規格' : isDesignCompleted ? '系統設計已完成' : '系統設計',
+                                children: isGeneratingDesign ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                    className: "w-4 h-4 animate-spin"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 262,
+                                    columnNumber: 15
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
+                                    className: "w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 264,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 240,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleImplement,
+                                disabled: !hasRepo || isImplementing || isImplemented,
+                                className: `p-1.5 rounded transition-colors ${!hasRepo ? 'text-muted-foreground/50 cursor-not-allowed' : isImplementing ? 'text-muted-foreground cursor-wait' : isImplemented ? 'text-green-400 cursor-not-allowed' : 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950'}`,
+                                "aria-label": isImplemented ? '實作完成' : '開始實作',
+                                title: !hasRepo ? '請先完成系統設計' : isImplemented ? '實作完成' : '開始實作',
+                                children: isImplementing ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                    className: "w-4 h-4 animate-spin"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 291,
+                                    columnNumber: 15
+                                }, this) : isImplemented ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__["CheckCircle"], {
+                                    className: "w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 293,
+                                    columnNumber: 15
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PlayCircle$3e$__["PlayCircle"], {
+                                    className: "w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/TaskCard.tsx",
+                                    lineNumber: 295,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/TaskCard.tsx",
+                                lineNumber: 269,
+                                columnNumber: 11
+                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>onEdit(task),
                                 className: "p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors",
@@ -555,12 +826,12 @@ function TaskCard({ task, onEdit, onDelete }) {
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/TaskCard.tsx",
-                                    lineNumber: 66,
+                                    lineNumber: 304,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/TaskCard.tsx",
-                                lineNumber: 61,
+                                lineNumber: 299,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -571,33 +842,42 @@ function TaskCard({ task, onEdit, onDelete }) {
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/TaskCard.tsx",
-                                    lineNumber: 73,
+                                    lineNumber: 311,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/TaskCard.tsx",
-                                lineNumber: 68,
+                                lineNumber: 306,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/TaskCard.tsx",
-                        lineNumber: 60,
+                        lineNumber: 209,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/TaskCard.tsx",
-                lineNumber: 56,
+                lineNumber: 205,
                 columnNumber: 7
+            }, this),
+            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-xs text-red-500 mt-2",
+                children: error
+            }, void 0, false, {
+                fileName: "[project]/src/components/TaskCard.tsx",
+                lineNumber: 316,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/TaskCard.tsx",
-        lineNumber: 20,
+        lineNumber: 141,
         columnNumber: 5
     }, this);
 }
+_s(TaskCard, "CzRORwzRKrmEn1EZ3gbihC4WgL0=");
 _c = TaskCard;
 var _c;
 __turbopack_context__.k.register(_c, "TaskCard");
@@ -636,8 +916,11 @@ const STATUS_CONFIG = {
         border: 'border-green-300 dark:border-green-600'
     }
 };
-function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
+function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange, onRefreshTasks }) {
     const config = STATUS_CONFIG[status];
+    const handleSpecGenerated = ()=>{
+        onRefreshTasks();
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `flex-1 min-w-[280px] max-w-[400px] rounded-xl ${config.bg} border ${config.border} p-4`,
         children: [
@@ -650,7 +933,7 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                             className: `w-3 h-3 rounded-full ${config.dot}`
                         }, void 0, false, {
                             fileName: "[project]/src/components/Column.tsx",
-                            lineNumber: 39,
+                            lineNumber: 44,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -658,7 +941,7 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                             children: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STATUS_LABELS"][status]
                         }, void 0, false, {
                             fileName: "[project]/src/components/Column.tsx",
-                            lineNumber: 40,
+                            lineNumber: 45,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -666,18 +949,18 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                             children: tasks.length
                         }, void 0, false, {
                             fileName: "[project]/src/components/Column.tsx",
-                            lineNumber: 41,
+                            lineNumber: 46,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Column.tsx",
-                    lineNumber: 38,
+                    lineNumber: 43,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Column.tsx",
-                lineNumber: 37,
+                lineNumber: 42,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -688,10 +971,11 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TaskCard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TaskCard"], {
                                     task: task,
                                     onEdit: onEditTask,
-                                    onDelete: onDeleteTask
+                                    onDelete: onDeleteTask,
+                                    onSpecGenerated: handleSpecGenerated
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Column.tsx",
-                                    lineNumber: 50,
+                                    lineNumber: 55,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -706,7 +990,7 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                                                 children: "移至待辦"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Column.tsx",
-                                                lineNumber: 62,
+                                                lineNumber: 68,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -714,7 +998,7 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                                                 children: "移至進行中"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Column.tsx",
-                                                lineNumber: 63,
+                                                lineNumber: 69,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -722,24 +1006,24 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                                                 children: "移至已完成"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Column.tsx",
-                                                lineNumber: 64,
+                                                lineNumber: 70,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Column.tsx",
-                                        lineNumber: 57,
+                                        lineNumber: 63,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Column.tsx",
-                                    lineNumber: 56,
+                                    lineNumber: 62,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, task.id, true, {
                             fileName: "[project]/src/components/Column.tsx",
-                            lineNumber: 49,
+                            lineNumber: 54,
                             columnNumber: 11
                         }, this)),
                     tasks.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -747,19 +1031,19 @@ function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }) {
                         children: "沒有任務"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Column.tsx",
-                        lineNumber: 71,
+                        lineNumber: 77,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Column.tsx",
-                lineNumber: 47,
+                lineNumber: 52,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Column.tsx",
-        lineNumber: 36,
+        lineNumber: 41,
         columnNumber: 5
     }, this);
 }
@@ -787,7 +1071,7 @@ const COLUMNS = [
     'in-progress',
     'done'
 ];
-function Board({ tasks, onEditTask, onDeleteTask, onStatusChange }) {
+function Board({ tasks, onEditTask, onDeleteTask, onStatusChange, onRefreshTasks }) {
     const getTasksByStatus = (status)=>{
         return tasks.filter((task)=>task.status === status);
     };
@@ -798,15 +1082,16 @@ function Board({ tasks, onEditTask, onDeleteTask, onStatusChange }) {
                 tasks: getTasksByStatus(status),
                 onEditTask: onEditTask,
                 onDeleteTask: onDeleteTask,
-                onStatusChange: onStatusChange
+                onStatusChange: onStatusChange,
+                onRefreshTasks: onRefreshTasks
             }, status, false, {
                 fileName: "[project]/src/components/Board.tsx",
-                lineNumber: 23,
+                lineNumber: 24,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "[project]/src/components/Board.tsx",
-        lineNumber: 21,
+        lineNumber: 22,
         columnNumber: 5
     }, this);
 }
@@ -1432,6 +1717,16 @@ function useTasks() {
     }["useTasks.useCallback[updateTaskStatus]"], [
         updateTask
     ]);
+    const refreshTasks = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useTasks.useCallback[refreshTasks]": async ()=>{
+            try {
+                const serverTasks = await fetchTasks();
+                setTasks(serverTasks);
+            } catch (error) {
+                console.error('Failed to refresh tasks:', error);
+            }
+        }
+    }["useTasks.useCallback[refreshTasks]"], []);
     const filteredTasks = tasks.filter((task)=>{
         // Search filter
         if (filter.search) {
@@ -1482,12 +1777,13 @@ function useTasks() {
         updateTask,
         deleteTask,
         updateTaskStatus,
+        refreshTasks,
         getTasksByStatus,
         getAllTags,
         isLoaded
     };
 }
-_s(useTasks, "eLRzkzZu37TMYqVdBfYpA7Ym5DM=");
+_s(useTasks, "2B04P1kbpjD0mCyF5KiKeMBdQKU=");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -1519,7 +1815,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 function Home() {
     _s();
-    const { tasks, filter, setFilter, addTask, updateTask, deleteTask, updateTaskStatus, getAllTags, isLoaded } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useTasks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTasks"])();
+    const { tasks, filter, setFilter, addTask, updateTask, deleteTask, updateTaskStatus, refreshTasks, getAllTags, isLoaded } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useTasks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTasks"])();
     const [isModalOpen, setIsModalOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [editingTask, setEditingTask] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [deletingTaskId, setDeletingTaskId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -1594,6 +1890,9 @@ function Home() {
     const handleStatusChange = (id, status)=>{
         updateTaskStatus(id, status);
     };
+    const handleRefreshTasks = ()=>{
+        refreshTasks();
+    };
     if (!isLoaded) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "min-h-screen flex items-center justify-center",
@@ -1602,12 +1901,12 @@ function Home() {
                 children: "載入中..."
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 101,
+                lineNumber: 106,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/page.tsx",
-            lineNumber: 100,
+            lineNumber: 105,
             columnNumber: 7
         }, this);
     }
@@ -1618,7 +1917,7 @@ function Home() {
                 onNewTask: handleNewTask
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 108,
+                lineNumber: 113,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$FilterBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FilterBar"], {
@@ -1627,7 +1926,7 @@ function Home() {
                 allTags: getAllTags()
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 110,
+                lineNumber: 115,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1636,15 +1935,16 @@ function Home() {
                     tasks: tasks,
                     onEditTask: handleEditTask,
                     onDeleteTask: handleDeleteTask,
-                    onStatusChange: handleStatusChange
+                    onStatusChange: handleStatusChange,
+                    onRefreshTasks: handleRefreshTasks
                 }, void 0, false, {
                     fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 117,
+                    lineNumber: 122,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 116,
+                lineNumber: 121,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TaskModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TaskModal"], {
@@ -1654,7 +1954,7 @@ function Home() {
                 task: editingTask
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 125,
+                lineNumber: 131,
                 columnNumber: 7
             }, this),
             deletingTaskId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1671,12 +1971,12 @@ function Home() {
                                         className: "w-5 h-5 text-red-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/page.tsx",
-                                        lineNumber: 138,
+                                        lineNumber: 144,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 137,
+                                    lineNumber: 143,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1684,13 +1984,13 @@ function Home() {
                                     children: "確認刪除"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 140,
+                                    lineNumber: 146,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 136,
+                            lineNumber: 142,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1698,7 +1998,7 @@ function Home() {
                             children: "確定要刪除這個任務嗎？此操作無法復原。"
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 142,
+                            lineNumber: 148,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1710,7 +2010,7 @@ function Home() {
                                     children: "取消"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 152,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1719,34 +2019,34 @@ function Home() {
                                     children: "刪除"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 152,
+                                    lineNumber: 158,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 145,
+                            lineNumber: 151,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 135,
+                    lineNumber: 141,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.tsx",
-                lineNumber: 134,
+                lineNumber: 140,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 107,
+        lineNumber: 112,
         columnNumber: 5
     }, this);
 }
-_s(Home, "wg/wISdjzmFMyb4LhHbsKA2nwJU=", false, function() {
+_s(Home, "WKhudAIVMR29d0fXj/iibkheHpo=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useTasks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTasks"]
     ];

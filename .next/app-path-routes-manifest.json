@@ -1,6 +1,9 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/api/specs/design/route": "/api/specs/design",
+  "/api/specs/generate/route": "/api/specs/generate",
+  "/api/specs/implement/route": "/api/specs/implement",
   "/api/specs/route": "/api/specs",
   "/api/tasks/[id]/route": "/api/tasks/[id]",
   "/api/tasks/route": "/api/tasks",

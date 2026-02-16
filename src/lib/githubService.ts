@@ -36,14 +36,14 @@ ${task.updatedAt}
 `
 }
 
-// Generate repo name from task title
+// Generate repo name from task title (single repo per task)
 const generateRepoName = (task: Task): string => {
   const sanitized = task.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .substring(0, 50)
-  return `dev-board-spec-${sanitized}`
+  return `dev-board-${sanitized}`
 }
 
 // Create GitHub repo and push initial spec
@@ -209,14 +209,14 @@ src/
   return designDoc
 }
 
-// Generate design repo name
+// Generate design repo name (now uses same naming as spec)
 const generateDesignRepoName = (task: Task): string => {
   const sanitized = task.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .substring(0, 50)
-  return `dev-board-design-${sanitized}`
+  return `dev-board-${sanitized}`
 }
 
 // Create GitHub repo for system design
@@ -372,4 +372,214 @@ export async function commitImplementationStep(
     console.error('Error committing implementation step:', error.message)
     throw new Error(`Failed to commit implementation step: ${error.message}`)
   }
+}
+
+// ============= New Single Repo Functions =============
+
+/**
+ * Create or update SPEC.md in the task's repo
+ * If repo doesn't exist, creates it with SPEC.md
+ * If repo exists, updates SPEC.md
+ */
+export async function createOrUpdateSpec(task: Task): Promise<string> {
+  ensureTempDir()
+  
+  const repoName = generateRepoName(task)
+  const repoDir = path.join(GIT_TEMP_DIR, repoName)
+  const { execSync } = require('child_process')
+  
+  // Clean up if exists
+  if (fs.existsSync(repoDir)) {
+    fs.rmSync(repoDir, { recursive: true, force: true })
+  }
+  
+  fs.mkdirSync(repoDir, { recursive: true })
+  
+  let repoUrl: string
+  
+  try {
+    // Try to create new repo
+    execSync(`gh repo create ${repoName} --private`, {
+      cwd: process.cwd(),
+      stdio: 'pipe'
+    })
+    
+    // Clone the newly created repo
+    execSync(`gh repo clone ${repoName} .`, {
+      cwd: repoDir,
+      stdio: 'pipe'
+    })
+  } catch (error: any) {
+    // Repo might already exist, try to clone it
+    try {
+      execSync(`gh repo clone ${repoName} .`, {
+        cwd: repoDir,
+        stdio: 'pipe'
+      })
+    } catch (cloneError: any) {
+      console.error('Repo clone error:', cloneError.message)
+      throw new Error(`Failed to access repository: ${cloneError.message}`)
+    }
+  }
+  
+  // Create SPEC.md
+  const specContent = generateSpecContent(task)
+  fs.writeFileSync(path.join(repoDir, 'SPEC.md'), specContent, 'utf-8')
+  
+  // Initialize git and commit
+  const git: SimpleGit = simpleGit(repoDir)
+  
+  // Check if it's a git repo
+  try {
+    await git.status()
+  } catch {
+    // Not a git repo, initialize it
+    await git.init()
+    await git.addConfig('user.email', 'devboard@local')
+    await git.addConfig('user.name', 'DevBoard')
+  }
+  
+  await git.add('.')
+  await git.commit(task.repoUrl ? 'Update SPEC.md' : 'Initial commit: Create SPEC.md')
+  
+  try {
+    await git.push()
+  } catch (pushError: any) {
+    // Try to set remote if push fails
+    try {
+      await git.addRemote('origin', `https://github.com/${repoName}`)
+      await git.push('-u', 'origin', 'main')
+    } catch {
+      // Maybe it's master branch
+      await git.push('-u', 'origin', 'master')
+    }
+  }
+  
+  // Get the remote URL
+  const remoteUrl = execSync(`git remote get-url origin`, {
+    cwd: repoDir,
+    encoding: 'utf-8'
+  }).trim()
+  
+  // Convert SSH URL to HTTPS URL if needed
+  let httpsUrl = remoteUrl
+  if (remoteUrl.startsWith('git@github.com:')) {
+    httpsUrl = remoteUrl.replace('git@github.com:', 'https://github.com/')
+  }
+  
+  // Clean up temp directory
+  fs.rmSync(repoDir, { recursive: true, force: true })
+  
+  return httpsUrl
+}
+
+/**
+ * Create or update DESIGN.md in the task's repo
+ * Requires repoUrl to exist (spec must be generated first)
+ */
+export async function createOrUpdateDesign(task: Task): Promise<string> {
+  if (!task.repoUrl) {
+    throw new Error('Repository does not exist. Please generate spec first.')
+  }
+  
+  ensureTempDir()
+  
+  // Extract repo name from URL
+  const urlParts = task.repoUrl.replace('https://github.com/', '').replace('.git', '').split('/')
+  const repoName = urlParts.pop() || ''
+  
+  const repoDir = path.join(GIT_TEMP_DIR, `${repoName}-design`)
+  const { execSync } = require('child_process')
+  
+  // Clean up if exists
+  if (fs.existsSync(repoDir)) {
+    fs.rmSync(repoDir, { recursive: true, force: true })
+  }
+  
+  fs.mkdirSync(repoDir, { recursive: true })
+  
+  try {
+    // Clone the existing repo
+    execSync(`gh repo clone ${repoName} .`, {
+      cwd: repoDir,
+      stdio: 'pipe'
+    })
+  } catch (error: any) {
+    console.error('Repo clone error:', error.message)
+    throw new Error(`Failed to clone repository: ${error.message}`)
+  }
+  
+  // Generate and write DESIGN.md
+  const designContent = await generateDesignContent(task)
+  fs.writeFileSync(path.join(repoDir, 'DESIGN.md'), designContent, 'utf-8')
+  
+  // Commit and push
+  const git: SimpleGit = simpleGit(repoDir)
+  await git.add('.')
+  await git.commit('Update: Add DESIGN.md - System Design')
+  await git.push()
+  
+  // Clean up
+  fs.rmSync(repoDir, { recursive: true, force: true })
+  
+  return task.repoUrl
+}
+
+/**
+ * Commit implementation content to the task's repo
+ * Creates/updates files in the repo
+ */
+export async function commitImplementation(
+  task: Task, 
+  content: { files: Record<string, string>; message?: string }
+): Promise<void> {
+  if (!task.repoUrl) {
+    throw new Error('Repository does not exist. Please generate spec first.')
+  }
+  
+  ensureTempDir()
+  
+  // Extract repo name from URL
+  const urlParts = task.repoUrl.replace('https://github.com/', '').replace('.git', '').split('/')
+  const repoName = urlParts.pop() || ''
+  
+  const repoDir = path.join(GIT_TEMP_DIR, `${repoName}-impl`)
+  const { execSync } = require('child_process')
+  
+  // Clean up if exists
+  if (fs.existsSync(repoDir)) {
+    fs.rmSync(repoDir, { recursive: true, force: true })
+  }
+  
+  fs.mkdirSync(repoDir, { recursive: true })
+  
+  try {
+    // Clone the existing repo
+    execSync(`gh repo clone ${repoName} .`, {
+      cwd: repoDir,
+      stdio: 'pipe'
+    })
+  } catch (error: any) {
+    console.error('Repo clone error:', error.message)
+    throw new Error(`Failed to clone repository: ${error.message}`)
+  }
+  
+  // Write the files
+  for (const [filePath, fileContent] of Object.entries(content.files)) {
+    const fullPath = path.join(repoDir, filePath)
+    const dir = path.dirname(fullPath)
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true })
+    }
+    fs.writeFileSync(fullPath, fileContent, 'utf-8')
+  }
+  
+  // Commit and push
+  const git: SimpleGit = simpleGit(repoDir)
+  await git.add('.')
+  await git.commit(content.message || 'feat: Add implementation')
+  await git.push()
+  
+  // Clean up
+  fs.rmSync(repoDir, { recursive: true, force: true })
 }

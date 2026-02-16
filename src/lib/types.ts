@@ -15,8 +15,6 @@ export interface Task {
   createdAt: string
   updatedAt: string
   repoUrl?: string
-  specRepoUrl?: string
-  designRepoUrl?: string
   designStatus?: DesignStatus
   implementationStatus?: ImplementationStatus
 }

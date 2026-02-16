@@ -84865,3 +84865,73 @@ Error: Route "/api/tasks/[id]" used `params.id`. `params` is a Promise and must 
   69 |
   70 |     if (taskIndex === -1) {
   71 |       return NextResponse.json(
+Failed to push to GitHub: Error: ENOENT: no such file or directory, open '/Users/ivyma/.openclaw/workspace/dev-board/data/specs-temp/spec-0570c508-1543-4a20-b8c6-5a140b531e1f.md'
+    at pushSpecToGitHub (src/app/api/specs/route.ts:146:21)
+    at POST (src/app/api/specs/route.ts:204:11)
+  144 |     // Write spec file
+  145 |     const destPath = path.join(tempDir, fileName)
+> 146 |     fs.writeFileSync(destPath, spec, 'utf-8')
+      |                     ^
+  147 |     
+  148 |     // Commit and push
+  149 |     execSync('git add .', { cwd: tempDir, stdio: 'pipe' }) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/ivyma/.openclaw/workspace/dev-board/data/specs-temp/spec-0570c508-1543-4a20-b8c6-5a140b531e1f.md'
+}
+Error generating spec: Error: ENOENT: no such file or directory, open '/Users/ivyma/.openclaw/workspace/dev-board/data/specs-temp/spec-0570c508-1543-4a20-b8c6-5a140b531e1f.md'
+    at pushSpecToGitHub (src/app/api/specs/route.ts:146:21)
+    at POST (src/app/api/specs/route.ts:204:11)
+  144 |     // Write spec file
+  145 |     const destPath = path.join(tempDir, fileName)
+> 146 |     fs.writeFileSync(destPath, spec, 'utf-8')
+      |                     ^
+  147 |     
+  148 |     // Commit and push
+  149 |     execSync('git add .', { cwd: tempDir, stdio: 'pipe' }) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/ivyma/.openclaw/workspace/dev-board/data/specs-temp/spec-0570c508-1543-4a20-b8c6-5a140b531e1f.md'
+}
+⨯ ./src/lib/githubService.ts:158:21
+Parsing ecmascript source code failed
+[0m [90m 156 |[39m   
+ [90m 157 |[39m   [90m// Clean up[39m
+[31m[1m>[22m[39m[90m 158 |[39m   fs[33m.[39mrmSync(repoDir [36mtrue[39m[33m,[39m force[33m:[39m[33m,[39m { recursive[33m:[39m [36mtrue[39m })
+ [90m     |[39m                     [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 159 |[39m }
+ [90m 160 |[39m
+ [90m 161 |[39m [90m// ============= Design Repo Functions =============[39m[0m
+
+Expected ',', got 'true'
+
+Import trace:
+  App Route:
+    ./src/lib/githubService.ts
+    ./src/app/api/tasks/[id]/route.ts
+
+
+⨯ ./src/lib/githubService.ts:158:21
+Parsing ecmascript source code failed
+[0m [90m 156 |[39m   
+ [90m 157 |[39m   [90m// Clean up[39m
+[31m[1m>[22m[39m[90m 158 |[39m   fs[33m.[39mrmSync(repoDir [36mtrue[39m[33m,[39m force[33m:[39m[33m,[39m { recursive[33m:[39m [36mtrue[39m })
+ [90m     |[39m                     [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 159 |[39m }
+ [90m 160 |[39m
+ [90m 161 |[39m [90m// ============= Design Repo Functions =============[39m[0m
+
+Expected ',', got 'true'
+
+Import trace:
+  App Route:
+    ./src/lib/githubService.ts
+    ./src/app/api/tasks/[id]/route.ts
+
+
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.

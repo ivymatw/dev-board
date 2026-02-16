@@ -24,8 +24,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
   }[task.priority]
 
   const hasUserRequirement = task.userRequirement && task.userRequirement.trim().length > 0
-  const hasSpecRepo = !!task.specRepoUrl || !!task.repoUrl
-  const hasDesignRepo = !!task.designRepoUrl
+  const hasRepo = !!task.repoUrl
   const isDesignCompleted = task.designStatus === 'completed'
   const isImplementingStatus = task.implementationStatus === 'in-progress'
   const isImplemented = task.implementationStatus === 'completed'
@@ -53,7 +52,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
 
       // Notify parent to refresh tasks
       if (onSpecGenerated) {
-        onSpecGenerated({ ...task, repoUrl: data.repoUrl, specRepoUrl: data.repoUrl })
+        onSpecGenerated({ ...task, repoUrl: data.repoUrl })
       }
     } catch (err) {
       console.error('Error generating spec:', err)
@@ -64,7 +63,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
   }
 
   const handleGenerateDesign = async () => {
-    if (!hasSpecRepo) return
+    if (!hasRepo) return
     
     setIsGeneratingDesign(true)
     setError(null)
@@ -88,7 +87,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
       if (onSpecGenerated) {
         onSpecGenerated({ 
           ...task, 
-          designRepoUrl: data.designRepoUrl,
+          repoUrl: data.repoUrl,
           designStatus: 'completed'
         })
       }
@@ -101,7 +100,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
   }
 
   const handleImplement = async () => {
-    if (!hasDesignRepo) return
+    if (!hasRepo) return
     
     setIsImplementing(true)
     setError(null)
@@ -164,20 +163,20 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
       
       {/* Status indicators */}
       <div className="flex flex-wrap gap-2 mb-3">
-        {hasSpecRepo && (
+        {hasRepo && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 rounded">
             <FileText className="w-3 h-3" />
             規格已產生
           </span>
         )}
-        {hasDesignRepo && (
+        {isDesignCompleted && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 rounded">
             <Sparkles className="w-3 h-3" />
             設計已完成
           </span>
         )}
         {isImplementingStatus && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-100 text-amber-amber-900-700 dark:bg dark:text-amber-300 rounded">
             <Loader2 className="w-3 h-3 animate-spin" />
             實作中
           </span>
@@ -217,15 +216,15 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
                 ? 'text-muted-foreground/50 cursor-not-allowed'
                 : isGeneratingSpec
                 ? 'text-muted-foreground cursor-wait'
-                : hasSpecRepo
+                : hasRepo
                 ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950'
                 : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950'
             }`}
-            aria-label={hasSpecRepo ? '更新規格' : '產生規格'}
+            aria-label={hasRepo ? '更新規格' : '產生規格'}
             title={
               !hasUserRequirement
                 ? '請先新增使用者需求'
-                : hasSpecRepo
+                : hasRepo
                 ? '更新規格'
                 : '產生規格'
             }
@@ -240,21 +239,21 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
           {/* System Design button */}
           <button
             onClick={handleGenerateDesign}
-            disabled={!hasSpecRepo || isGeneratingDesign || hasDesignRepo}
+            disabled={!hasRepo || isGeneratingDesign || isDesignCompleted}
             className={`p-1.5 rounded transition-colors ${
-              !hasSpecRepo
+              !hasRepo
                 ? 'text-muted-foreground/50 cursor-not-allowed'
                 : isGeneratingDesign
                 ? 'text-muted-foreground cursor-wait'
-                : hasDesignRepo
+                : isDesignCompleted
                 ? 'text-purple-400 cursor-not-allowed'
                 : 'text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:hover:bg-purple-950'
             }`}
-            aria-label={hasDesignRepo ? '系統設計已完成' : '系統設計'}
+            aria-label={isDesignCompleted ? '系統設計已完成' : '系統設計'}
             title={
-              !hasSpecRepo
+              !hasRepo
                 ? '請先產生規格'
-                : hasDesignRepo
+                : isDesignCompleted
                 ? '系統設計已完成'
                 : '系統設計'
             }
@@ -269,9 +268,9 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
           {/* Implement button */}
           <button
             onClick={handleImplement}
-            disabled={!hasDesignRepo || isImplementing || isImplemented}
+            disabled={!hasRepo || isImplementing || isImplemented}
             className={`p-1.5 rounded transition-colors ${
-              !hasDesignRepo
+              !hasRepo
                 ? 'text-muted-foreground/50 cursor-not-allowed'
                 : isImplementing
                 ? 'text-muted-foreground cursor-wait'
@@ -281,7 +280,7 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
             }`}
             aria-label={isImplemented ? '實作完成' : '開始實作'}
             title={
-              !hasDesignRepo
+              !hasRepo
                 ? '請先完成系統設計'
                 : isImplemented
                 ? '實作完成'
