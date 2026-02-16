@@ -1,6 +1,9 @@
 export type Priority = 'low' | 'medium' | 'high'
 export type Status = 'todo' | 'in-progress' | 'done'
 
+export type DesignStatus = 'pending' | 'in-progress' | 'completed'
+export type ImplementationStatus = 'pending' | 'in-progress' | 'completed'
+
 export interface Task {
   id: string
   title: string
@@ -12,6 +15,10 @@ export interface Task {
   createdAt: string
   updatedAt: string
   repoUrl?: string
+  specRepoUrl?: string
+  designRepoUrl?: string
+  designStatus?: DesignStatus
+  implementationStatus?: ImplementationStatus
 }
 
 export interface TaskFilter {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Edit2, Trash2, GripVertical, FileText, Loader2 } from 'lucide-react'
+import { Edit2, Trash2, GripVertical, FileText, Loader2, Sparkles, PlayCircle, CheckCircle } from 'lucide-react'
 import { useState } from 'react'
 import { Task, PRIORITY_COLORS, STATUS_COLORS } from '@/lib/types'
 
@@ -12,8 +12,10 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardProps) {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [generateError, setGenerateError] = useState<string | null>(null)
+  const [isGeneratingSpec, setIsGeneratingSpec] = useState(false)
+  const [isGeneratingDesign, setIsGeneratingDesign] = useState(false)
+  const [isImplementing, setIsImplementing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const priorityColor = {
     low: 'bg-green-500',
@@ -22,13 +24,17 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
   }[task.priority]
 
   const hasUserRequirement = task.userRequirement && task.userRequirement.trim().length > 0
-  const hasRepoUrl = !!task.repoUrl
+  const hasSpecRepo = !!task.specRepoUrl || !!task.repoUrl
+  const hasDesignRepo = !!task.designRepoUrl
+  const isDesignCompleted = task.designStatus === 'completed'
+  const isImplementingStatus = task.implementationStatus === 'in-progress'
+  const isImplemented = task.implementationStatus === 'completed'
 
   const handleGenerateSpec = async () => {
     if (!hasUserRequirement) return
     
-    setIsGenerating(true)
-    setGenerateError(null)
+    setIsGeneratingSpec(true)
+    setError(null)
 
     try {
       const response = await fetch('/api/specs/generate', {
@@ -47,13 +53,88 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
 
       // Notify parent to refresh tasks
       if (onSpecGenerated) {
-        onSpecGenerated({ ...task, repoUrl: data.repoUrl })
+        onSpecGenerated({ ...task, repoUrl: data.repoUrl, specRepoUrl: data.repoUrl })
       }
-    } catch (error) {
-      console.error('Error generating spec:', error)
-      setGenerateError(error instanceof Error ? error.message : 'Failed to generate spec')
+    } catch (err) {
+      console.error('Error generating spec:', err)
+      setError(err instanceof Error ? err.message : 'Failed to generate spec')
     } finally {
-      setIsGenerating(false)
+      setIsGeneratingSpec(false)
+    }
+  }
+
+  const handleGenerateDesign = async () => {
+    if (!hasSpecRepo) return
+    
+    setIsGeneratingDesign(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/specs/design', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId: task.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate design')
+      }
+
+      // Refresh the task
+      if (onSpecGenerated) {
+        onSpecGenerated({ 
+          ...task, 
+          designRepoUrl: data.designRepoUrl,
+          designStatus: 'completed'
+        })
+      }
+    } catch (err) {
+      console.error('Error generating design:', err)
+      setError(err instanceof Error ? err.message : 'Failed to generate design')
+    } finally {
+      setIsGeneratingDesign(false)
+    }
+  }
+
+  const handleImplement = async () => {
+    if (!hasDesignRepo) return
+    
+    setIsImplementing(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/specs/implement', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId: task.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to start implementation')
+      }
+
+      // Refresh the task
+      if (onSpecGenerated) {
+        onSpecGenerated({ 
+          ...task, 
+          implementationStatus: 'in-progress'
+        })
+      }
+      
+      alert(`Implementation started! ${data.totalSteps} steps to complete.`)
+    } catch (err) {
+      console.error('Error implementing:', err)
+      setError(err instanceof Error ? err.message : 'Failed to start implementation')
+    } finally {
+      setIsImplementing(false)
     }
   }
 
@@ -81,6 +162,34 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
         </div>
       )}
       
+      {/* Status indicators */}
+      <div className="flex flex-wrap gap-2 mb-3">
+        {hasSpecRepo && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 rounded">
+            <FileText className="w-3 h-3" />
+            規格已產生
+          </span>
+        )}
+        {hasDesignRepo && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 rounded">
+            <Sparkles className="w-3 h-3" />
+            設計已完成
+          </span>
+        )}
+        {isImplementingStatus && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded">
+            <Loader2 className="w-3 h-3 animate-spin" />
+            實作中
+          </span>
+        )}
+        {isImplemented && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded">
+            <CheckCircle className="w-3 h-3" />
+            實作完成
+          </span>
+        )}
+      </div>
+      
       {task.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-3">
           {task.tags.map(tag => (
@@ -99,33 +208,95 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
           {new Date(task.createdAt).toLocaleDateString('zh-TW')}
         </span>
         <div className="flex items-center gap-1">
+          {/* Spec button */}
           <button
             onClick={handleGenerateSpec}
-            disabled={!hasUserRequirement || isGenerating}
+            disabled={!hasUserRequirement || isGeneratingSpec}
             className={`p-1.5 rounded transition-colors ${
               !hasUserRequirement
                 ? 'text-muted-foreground/50 cursor-not-allowed'
-                : isGenerating
+                : isGeneratingSpec
                 ? 'text-muted-foreground cursor-wait'
-                : hasRepoUrl
+                : hasSpecRepo
                 ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950'
                 : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950'
             }`}
-            aria-label={hasRepoUrl ? '更新規格' : '產生規格'}
+            aria-label={hasSpecRepo ? '更新規格' : '產生規格'}
             title={
               !hasUserRequirement
                 ? '請先新增使用者需求'
-                : hasRepoUrl
+                : hasSpecRepo
                 ? '更新規格'
                 : '產生規格'
             }
           >
-            {isGenerating ? (
+            {isGeneratingSpec ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <FileText className="w-4 h-4" />
             )}
           </button>
+
+          {/* System Design button */}
+          <button
+            onClick={handleGenerateDesign}
+            disabled={!hasSpecRepo || isGeneratingDesign || hasDesignRepo}
+            className={`p-1.5 rounded transition-colors ${
+              !hasSpecRepo
+                ? 'text-muted-foreground/50 cursor-not-allowed'
+                : isGeneratingDesign
+                ? 'text-muted-foreground cursor-wait'
+                : hasDesignRepo
+                ? 'text-purple-400 cursor-not-allowed'
+                : 'text-purple-600 hover:text-purple-700 hover:bg-purple-50 dark:hover:bg-purple-950'
+            }`}
+            aria-label={hasDesignRepo ? '系統設計已完成' : '系統設計'}
+            title={
+              !hasSpecRepo
+                ? '請先產生規格'
+                : hasDesignRepo
+                ? '系統設計已完成'
+                : '系統設計'
+            }
+          >
+            {isGeneratingDesign ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Sparkles className="w-4 h-4" />
+            )}
+          </button>
+
+          {/* Implement button */}
+          <button
+            onClick={handleImplement}
+            disabled={!hasDesignRepo || isImplementing || isImplemented}
+            className={`p-1.5 rounded transition-colors ${
+              !hasDesignRepo
+                ? 'text-muted-foreground/50 cursor-not-allowed'
+                : isImplementing
+                ? 'text-muted-foreground cursor-wait'
+                : isImplemented
+                ? 'text-green-400 cursor-not-allowed'
+                : 'text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950'
+            }`}
+            aria-label={isImplemented ? '實作完成' : '開始實作'}
+            title={
+              !hasDesignRepo
+                ? '請先完成系統設計'
+                : isImplemented
+                ? '實作完成'
+                : '開始實作'
+            }
+          >
+            {isImplementing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : isImplemented ? (
+              <CheckCircle className="w-4 h-4" />
+            ) : (
+              <PlayCircle className="w-4 h-4" />
+            )}
+          </button>
+
           <button
             onClick={() => onEdit(task)}
             className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors"
@@ -142,8 +313,8 @@ export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardPr
           </button>
         </div>
       </div>
-      {generateError && (
-        <p className="text-xs text-red-500 mt-2">{generateError}</p>
+      {error && (
+        <p className="text-xs text-red-500 mt-2">{error}</p>
       )}
     </div>
   )
