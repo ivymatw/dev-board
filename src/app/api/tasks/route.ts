@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, description, priority, tags } = body
+    const { title, description, userRequirement, priority, tags } = body
 
     if (!title) {
       return NextResponse.json(
@@ -31,6 +31,7 @@ export async function POST(request: Request) {
       id: uuidv4(),
       title,
       description: description || '',
+      userRequirement: userRequirement || '',
       priority: priority || 'medium',
       status: 'todo',
       tags: tags || [],
