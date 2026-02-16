@@ -18,6 +18,7 @@ export default function Home() {
     updateTask,
     deleteTask,
     updateTaskStatus,
+    refreshTasks,
     getAllTags,
     isLoaded,
   } = useTasks()
@@ -95,6 +96,10 @@ export default function Home() {
     updateTaskStatus(id, status)
   }
 
+  const handleRefreshTasks = () => {
+    refreshTasks()
+  }
+
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -119,6 +124,7 @@ export default function Home() {
           onEditTask={handleEditTask}
           onDeleteTask={handleDeleteTask}
           onStatusChange={handleStatusChange}
+          onRefreshTasks={handleRefreshTasks}
         />
       </div>
 

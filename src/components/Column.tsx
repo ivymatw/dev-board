@@ -9,6 +9,7 @@ interface ColumnProps {
   onEditTask: (task: Task) => void
   onDeleteTask: (id: string) => void
   onStatusChange: (id: string, status: Status) => void
+  onRefreshTasks: () => void
 }
 
 const STATUS_CONFIG = {
@@ -29,8 +30,12 @@ const STATUS_CONFIG = {
   },
 }
 
-export function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange }: ColumnProps) {
+export function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange, onRefreshTasks }: ColumnProps) {
   const config = STATUS_CONFIG[status]
+
+  const handleSpecGenerated = () => {
+    onRefreshTasks()
+  }
 
   return (
     <div className={`flex-1 min-w-[280px] max-w-[400px] rounded-xl ${config.bg} border ${config.border} p-4`}>
@@ -51,6 +56,7 @@ export function Column({ status, tasks, onEditTask, onDeleteTask, onStatusChange
               task={task}
               onEdit={onEditTask}
               onDelete={onDeleteTask}
+              onSpecGenerated={handleSpecGenerated}
             />
             {/* Status change buttons */}
             <div className="flex justify-center mt-1 mb-2">

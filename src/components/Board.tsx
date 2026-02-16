@@ -8,11 +8,12 @@ interface BoardProps {
   onEditTask: (task: Task) => void
   onDeleteTask: (id: string) => void
   onStatusChange: (id: string, status: Status) => void
+  onRefreshTasks: () => void
 }
 
 const COLUMNS: Status[] = ['todo', 'in-progress', 'done']
 
-export function Board({ tasks, onEditTask, onDeleteTask, onStatusChange }: BoardProps) {
+export function Board({ tasks, onEditTask, onDeleteTask, onStatusChange, onRefreshTasks }: BoardProps) {
   const getTasksByStatus = (status: Status) => {
     return tasks.filter(task => task.status === status)
   }
@@ -27,6 +28,7 @@ export function Board({ tasks, onEditTask, onDeleteTask, onStatusChange }: Board
           onEditTask={onEditTask}
           onDeleteTask={onDeleteTask}
           onStatusChange={onStatusChange}
+          onRefreshTasks={onRefreshTasks}
         />
       ))}
     </div>

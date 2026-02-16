@@ -1,20 +1,61 @@
 'use client'
 
-import { Edit2, Trash2, GripVertical } from 'lucide-react'
+import { Edit2, Trash2, GripVertical, FileText, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { Task, PRIORITY_COLORS, STATUS_COLORS } from '@/lib/types'
 
 interface TaskCardProps {
   task: Task
   onEdit: (task: Task) => void
   onDelete: (id: string) => void
+  onSpecGenerated?: (task: Task) => void
 }
 
-export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, onSpecGenerated }: TaskCardProps) {
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generateError, setGenerateError] = useState<string | null>(null)
+
   const priorityColor = {
     low: 'bg-green-500',
     medium: 'bg-amber-500',
     high: 'bg-red-500',
   }[task.priority]
+
+  const hasUserRequirement = task.userRequirement && task.userRequirement.trim().length > 0
+  const hasRepoUrl = !!task.repoUrl
+
+  const handleGenerateSpec = async () => {
+    if (!hasUserRequirement) return
+    
+    setIsGenerating(true)
+    setGenerateError(null)
+
+    try {
+      const response = await fetch('/api/specs/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId: task.id }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate spec')
+      }
+
+      // Notify parent to refresh tasks
+      if (onSpecGenerated) {
+        onSpecGenerated({ ...task, repoUrl: data.repoUrl })
+      }
+    } catch (error) {
+      console.error('Error generating spec:', error)
+      setGenerateError(error instanceof Error ? error.message : 'Failed to generate spec')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
 
   return (
     <div
@@ -59,6 +100,33 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         </span>
         <div className="flex items-center gap-1">
           <button
+            onClick={handleGenerateSpec}
+            disabled={!hasUserRequirement || isGenerating}
+            className={`p-1.5 rounded transition-colors ${
+              !hasUserRequirement
+                ? 'text-muted-foreground/50 cursor-not-allowed'
+                : isGenerating
+                ? 'text-muted-foreground cursor-wait'
+                : hasRepoUrl
+                ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950'
+                : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950'
+            }`}
+            aria-label={hasRepoUrl ? '更新規格' : '產生規格'}
+            title={
+              !hasUserRequirement
+                ? '請先新增使用者需求'
+                : hasRepoUrl
+                ? '更新規格'
+                : '產生規格'
+            }
+          >
+            {isGenerating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <FileText className="w-4 h-4" />
+            )}
+          </button>
+          <button
             onClick={() => onEdit(task)}
             className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors"
             aria-label="編輯任務"
@@ -74,6 +142,9 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
           </button>
         </div>
       </div>
+      {generateError && (
+        <p className="text-xs text-red-500 mt-2">{generateError}</p>
+      )}
     </div>
   )
 }

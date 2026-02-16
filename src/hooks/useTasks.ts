@@ -210,6 +210,15 @@ export function useTasks() {
     updateTask(id, { status })
   }, [updateTask])
 
+  const refreshTasks = useCallback(async () => {
+    try {
+      const serverTasks = await fetchTasks()
+      setTasks(serverTasks)
+    } catch (error) {
+      console.error('Failed to refresh tasks:', error)
+    }
+  }, [])
+
   const filteredTasks = tasks.filter(task => {
     // Search filter
     if (filter.search) {
@@ -254,6 +263,7 @@ export function useTasks() {
     updateTask,
     deleteTask,
     updateTaskStatus,
+    refreshTasks,
     getTasksByStatus,
     getAllTags,
     isLoaded,
