@@ -28,9 +28,16 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
       </div>
       
       {task.description && (
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
           {task.description}
         </p>
+      )}
+      
+      {task.userRequirement && (
+        <div className="text-sm bg-blue-50 dark:bg-blue-950 p-2 rounded mb-2 line-clamp-2 border-l-2 border-blue-500">
+          <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">使用者需求：</span>
+          <p className="text-blue-700 dark:text-blue-300 text-xs mt-0.5">{task.userRequirement}</p>
+        </div>
       )}
       
       {task.tags.length > 0 && (
