@@ -16,6 +16,7 @@ const PRIORITIES: Priority[] = ['low', 'medium', 'high']
 export function TaskModal({ isOpen, onClose, onSubmit, task }: TaskModalProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [userRequirement, setUserRequirement] = useState('')
   const [priority, setPriority] = useState<Priority>('medium')
   const [tagsInput, setTagsInput] = useState('')
 
@@ -23,11 +24,13 @@ export function TaskModal({ isOpen, onClose, onSubmit, task }: TaskModalProps) {
     if (task) {
       setTitle(task.title)
       setDescription(task.description)
+      setUserRequirement(task.userRequirement || '')
       setPriority(task.priority)
       setTagsInput(task.tags.join(', '))
     } else {
       setTitle('')
       setDescription('')
+      setUserRequirement('')
       setPriority('medium')
       setTagsInput('')
     }
@@ -44,6 +47,7 @@ export function TaskModal({ isOpen, onClose, onSubmit, task }: TaskModalProps) {
     onSubmit({
       title,
       description,
+      userRequirement,
       priority,
       tags,
     })
@@ -110,6 +114,23 @@ export function TaskModal({ isOpen, onClose, onSubmit, task }: TaskModalProps) {
               rows={3}
               className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
             />
+          </div>
+          
+          {/* User Requirement */}
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              使用者需求
+            </label>
+            <textarea
+              value={userRequirement}
+              onChange={e => setUserRequirement(e.target.value)}
+              placeholder="輸入使用者需求（用於產生規格文件）"
+              rows={3}
+              className="w-full px-3 py-2 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              此欄位將用於自動產生規格文件
+            </p>
           </div>
           
           {/* Priority */}
