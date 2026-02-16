@@ -606,10 +606,23 @@ async function createOrUpdateSpec(task) {
         // Try to set remote if push fails
         try {
             await git.addRemote('origin', `https://github.com/${repoName}`);
-            await git.push('-u', 'origin', 'main');
+            await git.push([
+                '-u',
+                'origin',
+                'main'
+            ]);
         } catch  {
             // Maybe it's master branch
-            await git.push('-u', 'origin', 'master');
+            try {
+                await git.push([
+                    '-u',
+                    'origin',
+                    'master'
+                ]);
+            } catch  {
+                // Try without specifying branch
+                await git.push();
+            }
         }
     }
     // Get the remote URL

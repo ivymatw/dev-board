@@ -1,24 +1,2 @@
-[00:00:00.395] Server  LOG     ✓ Ready in 243ms
-[00:00:01.710] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:22.455] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:29.970] Server  LOG     Creating design GitHub repo for task: md轉epub
-[00:00:33.162] Server  LOG     Created design repo: https://github.com/ivymatw/dev-board-design-mdepub.git
-[00:01:08.159] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:12:57.716] Server  LOG     ✓ Compiled in 399ms
-[00:14:32.849] Server  LOG     ✓ Compiled in 41ms
-[00:14:33.422] Browser ERROR   uncaughtError: ReferenceError: hasSpecRepo is not defined
-[00:14:44.250] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:14:44.312] Server  LOG     ✓ Compiled in 33ms
-[00:14:44.415] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:45.426] Browser ERROR   uncaughtError: ReferenceError: hasSpecRepo is not defined
-[00:14:53.067] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:14:53.120] Server  LOG     ✓ Compiled in 39ms
-[00:14:53.214] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:53.422] Browser ERROR   uncaughtError: ReferenceError: hasSpecRepo is not defined
-[00:15:00.729] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:15:00.781] Server  LOG     ✓ Compiled in 37ms
-[00:15:00.855] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:15:01.423] Browser ERROR   uncaughtError: ReferenceError: hasSpecRepo is not defined
-[00:15:08.220] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:15:08.271] Server  LOG     ✓ Compiled in 34ms
-[00:15:08.332] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:00.365] Server  LOG     ✓ Ready in 229ms
+[00:00:01.740] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
