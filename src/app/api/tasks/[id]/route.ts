@@ -3,11 +3,12 @@ import { getTasks, saveTasks } from '@/lib/storage'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const tasks = getTasks()
-    const task = tasks.find(t => t.id === params.id)
+    const task = tasks.find(t => t.id === id)
 
     if (!task) {
       return NextResponse.json(
@@ -27,12 +28,13 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const tasks = getTasks()
-    const taskIndex = tasks.findIndex(t => t.id === params.id)
+    const taskIndex = tasks.findIndex(t => t.id === id)
 
     if (taskIndex === -1) {
       return NextResponse.json(
@@ -61,11 +63,12 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const tasks = getTasks()
-    const taskIndex = tasks.findIndex(t => t.id === params.id)
+    const taskIndex = tasks.findIndex(t => t.id === id)
 
     if (taskIndex === -1) {
       return NextResponse.json(
